@@ -5,7 +5,7 @@
 .ui-input-stepper.ui-input-stepper-data-value::before,
 .ui-input-stepper .ui-input-stepper-data-value::before{
   pointer-events: none;
-  content: attr(data-value);
+  content: attr(data-value-prefix)attr(data-value)attr(data-value-suffix);
   position: absolute;
   left:0;right:0;top:0;bottom:0;
   z-index: 9;
