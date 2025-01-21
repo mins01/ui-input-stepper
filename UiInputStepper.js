@@ -142,8 +142,9 @@ class UiInputStepper{
    *
    * @static
    */
-  static initDataValue(){
-    window.document.querySelectorAll('.ui-input-stepper').forEach((wrap)=>{
+  static initDataValue(target=null){
+    if(target===null){ target = window.document }
+    target.querySelectorAll('.ui-input-stepper').forEach((wrap)=>{
       const input = wrap.querySelector('input')
       this.step(wrap,input,'none',null)
     })
