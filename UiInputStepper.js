@@ -54,14 +54,14 @@ class UiInputStepper{
    * @param {string} stepper step type up/down/none
    * @param {Event} [event=null] relative event
    */
-  static step(input,stepper,event=null){
+  static step(wrap,input,stepper,event=null){
     switch(stepper){
       case 'up':input.stepUp();break;
       case 'down':input.stepDown();break;
       case 'none':break;
       default: throw new Error(`Unsupported stepper. (${stepper})`);
     }
-    const wrap = input.closest('.ui-input-stepper');
+    // const wrap = input.closest('.ui-input-stepper');
     if(wrap.classList.contains('data-value')){
       if(wrap.oninput){
         if(event===null || event.type!='input'){ 
@@ -79,14 +79,16 @@ class UiInputStepper{
   }
   static currentDelay = 200;
   static tm = null;
-  static setTimeout(input,stepper,event){
+  static setTimeout(wrap,input,stepper,event){
     this.tm = setTimeout(() => {
-      this.step(input,stepper,event);
-      this.setTimeout(input,stepper,event);
+      this.step(wrap,input,stepper,event);
+      this.setTimeout(wrap,input,stepper,event);
     }, this.currentDelay);
     
-    if(this.currentDelay > this.minDelay){
-      this.currentDelay = Math.max(this.minDelay,this.currentDelay * this.delayMultipler);   
+    // const wrap = input.closest('.ui-input-stepper');  
+    const minDelay = parseFloat(wrap.dataset.minDelay??this.minDelay);   
+    if(this.currentDelay > minDelay){
+      this.currentDelay = Math.max(minDelay,this.currentDelay * parseFloat(wrap.dataset.delayMultipler??this.delayMultipler));   
     }
     
   } 
@@ -105,9 +107,9 @@ class UiInputStepper{
     if(!target.dataset.stepper){ return; }
     const stepper = target.dataset.stepper
     
-    this.step(input,stepper,event)
-    this.currentDelay = this.firstDelay;
-    this.setTimeout(input,stepper,event)
+    this.step(wrap,input,stepper,event)
+    this.currentDelay = parseFloat(wrap.dataset.firstDelay??this.firstDelay);
+    this.setTimeout(wrap,input,stepper,event)
     window.addEventListener('pointerup',this.onpointerup,{once:true});
   }
   
@@ -131,7 +133,7 @@ class UiInputStepper{
     if(!wrap){ return;}
     const input = wrap.querySelector('input');
     if(!input){ return; }
-    this.step(input,'none',null)
+    this.step(wrap,input,'none',null)
   }
 
 
@@ -141,9 +143,9 @@ class UiInputStepper{
    * @static
    */
   static initDataValue(){
-    window.document.querySelectorAll('.ui-input-stepper input').forEach((input)=>{
-      console.log(input);
-      this.step(input,'none',null)
+    window.document.querySelectorAll('.ui-input-stepper').forEach((wrap)=>{
+      const input = wrap.querySelector('input')
+      this.step(wrap,input,'none',null)
     })
   }
 
