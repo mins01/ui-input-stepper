@@ -150,6 +150,7 @@ class UiInputStepper{
   }
   static dataValueFromInput(input){
     const wrap = input.closest('.ui-input-stepper');
+    if(!wrap) return;
     this.step(wrap,input,'none',null)
   }
 
