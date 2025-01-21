@@ -14,7 +14,7 @@ class UiInputStepper{
    * @static
    * @type {number}
    */
-  static delayMultipler = 0.98
+  static delayMultipler = 0.96
 
   /**
    * setTimeout min delay
