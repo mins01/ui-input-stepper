@@ -200,6 +200,18 @@
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
+        <hr>
+        <h2>UiInputStepper.dataValueFromInput(input)</h2>
+        <div class="input-group my-1 ui-input-stepper data-value" data-min-delay="200" data-delay-multipler="0.1">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" id="test-dataValueFromInput" type="range" min="-1"step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div>
+            <button type="btn btn-primary" type="button" onclick="const t = document.querySelector('#test-dataValueFromInput'); t.value=Math.random()*2-1; UiInputStepper.dataValueFromInput(t); ">TEST</button>
+        </div>
     </div>
 </body>
 </html>
