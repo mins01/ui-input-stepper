@@ -64,12 +64,12 @@
             <input class="form-control" type="number" min="-10" step="0.1"step="0.1" max="999"  value="0" >
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
-        <div class="input-group my-1 ui-input-stepper data-value">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <input class="form-control" type="number" min="-10" step="0.1"step="0.1" max="999"  value="0" >
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
-        <div class="input-group my-1 ui-input-stepper data-value" oninput="this.querySelector('out').textContent = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" oninput="this.querySelector('out').textContent = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-none" type="number" min="-1"step="0.01" max="1"  value="0" >
@@ -99,28 +99,28 @@
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
-        <div class="input-group my-1 ui-input-stepper data-value">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-10"step="0.1" max="999"  value="0" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
-        <div class="input-group my-1 ui-input-stepper data-value" oninput="this.dataset.value = (parseFloat(event.target.value)*100).toFixed(2)+' %'">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" oninput="this.dataset.value = (parseFloat(event.target.value)*100).toFixed(2)+' %'">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
-        <div class="input-group my-1 ui-input-stepper data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
-        <div class="input-group my-1 ui-input-stepper data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input list="datalist-test"  class="d-block w-100" type="range" min="-1"step="0.25" max="1"  value="-0.25" >
@@ -128,7 +128,7 @@
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>        
-        <div class="input-group my-1 ui-input-stepper data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input  class="form-range d-block" type="range" min="-1" step="0.25" max="1"  value="0.25" >
@@ -150,7 +150,7 @@
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
 
-        <span class="ui-input-stepper data-value">
+        <span class="ui-input-stepper ui-input-stepper-data-value">
             <button class="btn-stepper" data-stepper="down">-</button>
             <input type="range" min="-1"step="0.01" max="1"  value="0" >
             <button class="btn-stepper" data-stepper="up">+</button>
@@ -169,7 +169,7 @@
         </div>
         <hr>
         <h2>attribute : data-first-delay=10</h2>
-        <div class="input-group my-1 ui-input-stepper data-value" data-first-delay="10">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-first-delay="10">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
@@ -177,7 +177,7 @@
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
         <h2>attribute : data-first-delay=0.8</h2>
-        <div class="input-group my-1 ui-input-stepper data-value" data-delay-multipler="0.8">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-delay-multipler="0.8">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
@@ -185,7 +185,7 @@
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
         <h2>attribute : data-first-delay=1.2</h2>
-        <div class="input-group my-1 ui-input-stepper data-value" data-delay-multipler="1.2" data-first-delay=10>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-delay-multipler="1.2" data-first-delay=10>
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
@@ -193,7 +193,7 @@
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
         <h2>attribute : data-min-delay=200</h2>
-        <div class="input-group my-1 ui-input-stepper data-value" data-min-delay="200" data-delay-multipler="0.1">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
@@ -202,7 +202,7 @@
         </div>
         <hr>
         <h2>UiInputStepper.dataValueFromInput(input)</h2>
-        <div class="input-group my-1 ui-input-stepper data-value" data-min-delay="200" data-delay-multipler="0.1">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" id="test-dataValueFromInput" type="range" min="-1"step="0.01" max="1"  value="0" >
@@ -213,24 +213,24 @@
             <button type="btn btn-primary" type="button" onclick="const t = document.querySelector('#test-dataValueFromInput'); t.value=Math.random()*2-1; UiInputStepper.dataValueFromInput(t); ">TEST</button>
         </div>
         <hr>
-        <h2>multiple data-value</h2>
-        <div class="input-group my-1 ui-input-stepper data-value" data-min-delay="200" data-delay-multipler="0.1">
+        <h2>multiple ui-input-stepper-data-value</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
-            <div class="form-control data-value">
+            <div class="form-control ui-input-stepper-data-value">
 
             </div>
         </div>
-        <div class="input-group my-1 ui-input-stepper data-value" data-min-delay="200" data-delay-multipler="0.1">
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
-            <div class="form-control data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
+            <div class="form-control ui-input-stepper-data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
                 
             </div>
         </div>
@@ -240,7 +240,7 @@
                 <input class="form-range d-block" type="range" min="-1"step="0.01" max="1"  value="0" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
-            <div class="form-control data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
+            <div class="form-control ui-input-stepper-data-value" oninput="this.dataset.value = parseFloat(event.target.value)+'/'+(parseFloat(event.target.value)*Math.PI).toFixed(2)+' rad' + '/'+(parseFloat(event.target.value)*Math.PI*180/Math.PI).toFixed(2)+' °'">
                 
             </div>
         </div>

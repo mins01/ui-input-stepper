@@ -63,7 +63,7 @@ class UiInputStepper{
       default: throw new Error(`Unsupported stepper. (${stepper})`);
     }
     // const wrap = input.closest('.ui-input-stepper');
-    if(wrap.classList.contains('data-value')){
+    if(wrap.classList.contains('ui-input-stepper-data-value')){
       if(wrap.oninput){
         if(event===null || event.type!='input'){ 
           const fakeEvent = { type: 'input', target: input, timeStamp: Date.now(),}
@@ -73,7 +73,7 @@ class UiInputStepper{
         wrap.dataset.value = input.value;
       }
     }
-    wrap.querySelectorAll('.data-value').forEach(el=>{
+    wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{
       if(el.oninput){
         if(event===null || event.type!='input'){ 
           const fakeEvent = { type: 'input', target: input, timeStamp: Date.now(),}
