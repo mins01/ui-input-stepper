@@ -1,0 +1,20 @@
+.ui-input-stepper{
+  position: relative;
+}
+
+.ui-input-stepper.data-value::before{
+  pointer-events: none;
+  content: attr(data-value);
+  position: absolute;
+  left:0;right:0;top:0;bottom:0;
+  z-index: 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-shadow: 
+  -1px -1px 0 #fff, 
+  1px -1px 0 #fff, 
+  -1px 1px 0 #fff, 
+  1px 1px 0 #fff;
+}
