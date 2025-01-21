@@ -50,6 +50,7 @@ class UiInputStepper{
    * 단계값 증가
    *
    * @static
+   * @param {HTMLElement} wrap 
    * @param {HTMLInputElement} input 
    * @param {string} stepper step type up/down/none
    * @param {Event} [event=null] relative event
@@ -65,23 +66,55 @@ class UiInputStepper{
     if(wrap.classList.contains('data-value')){
       if(wrap.oninput){
         if(event===null || event.type!='input'){ 
-          const fakeEvent = {
-            type: 'input',
-            target: input,
-            timeStamp: Date.now(),
-          }
-          wrap.oninput(fakeEvent) 
+          const fakeEvent = { type: 'input', target: input, timeStamp: Date.now(),}
+          wrap.oninput(fakeEvent)
         }
       }else{
         wrap.dataset.value = input.value;
       }
     }
+    wrap.querySelectorAll('.data-value').forEach(el=>{
+      if(el.oninput){
+        if(event===null || event.type!='input'){ 
+          const fakeEvent = { type: 'input', target: input, timeStamp: Date.now(),}
+          el.oninput(fakeEvent)
+        }
+      }else{
+        el.dataset.value = input.value;
+      }
+    })
+   
   }
+  
+  /**
+   * current delay time. (ms)
+   *
+   * @static
+   * @type {number}
+   */
   static currentDelay = 200;
+
+  /**
+   * tm = setTimeout()
+   *
+   * @static
+   * @type {?number}
+   */
   static tm = null;
-  static setTimeout(wrap,input,stepper,event){
+
+  /**
+   * Repeated Call
+   *
+   * @static
+   * @param {HTMLElement} wrap 
+   * @param {HTMLInputElement} input 
+   * @param {string} stepper step type up/down/none
+   * @param {Event} [event=null] relative event
+   */
+  static setTimeout(wrap,input,stepper,event=null){
     this.tm = setTimeout(() => {
       this.step(wrap,input,stepper,event);
+      this.dispatchInput(input);
       this.setTimeout(wrap,input,stepper,event);
     }, this.currentDelay);
     
@@ -108,6 +141,7 @@ class UiInputStepper{
     const stepper = target.dataset.stepper
     
     this.step(wrap,input,stepper,event)
+    this.dispatchInput(input);
     this.currentDelay = parseFloat(wrap.dataset.firstDelay??this.firstDelay);
     this.setTimeout(wrap,input,stepper,event)
     window.addEventListener('pointerup',this.onpointerup,{once:true});
@@ -136,6 +170,19 @@ class UiInputStepper{
     this.step(wrap,input,'none',null)
   }
 
+  /**
+   * trigger input event
+   *
+   * @static
+   * @param {HTMLInputElement} input 
+   */
+  static dispatchInput(input){
+    // trigger event
+    const event = new Event('input',{bubbles:true,cancelable:true});
+    input.dispatchEvent(event);
+  }
+      
+  
 
   /**
    * initialize data-value attribute
@@ -149,6 +196,13 @@ class UiInputStepper{
       this.step(wrap,input,'none',null)
     })
   }
+  
+  /**
+   * Fill data-value from inputElement
+   *
+   * @static
+   * @param {HTMLInputElement} input 
+   */
   static dataValueFromInput(input){
     const wrap = input.closest('.ui-input-stepper');
     if(!wrap) return;
