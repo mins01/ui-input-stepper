@@ -28,7 +28,7 @@ class UiInputStepper{
    * 이벤트 등록
    *
    * @static
-   * @param {HTMLElement} [target=window] 
+   * @param {?HTMLElement} [target=window] 
    */
   static addEventListener(target=window){
     target.addEventListener('pointerdown',this.onpointerdown)
@@ -39,7 +39,7 @@ class UiInputStepper{
    * 이벤트 제거
    *
    * @static
-   * @param {HTMLElement} [target=window] 
+   * @param {?HTMLElement} [target=window] 
    */
   static removeEventListener(target=window){
     target.removeEventListener('pointerdown',this.onpointerdown)
@@ -47,29 +47,43 @@ class UiInputStepper{
   }
 
   /**
-   * 단계값 증가
+   * step up/down
    *
    * @static
-   * @param {HTMLElement} wrap 
    * @param {HTMLInputElement} input 
    * @param {string} stepper step type up/down/none
-   * @param {Event} [event=null] relative event
    */
-  static step(wrap,input,stepper,event=null){
+  static step(input,stepper){
     switch(stepper){
       case 'up':input.stepUp();break;
       case 'down':input.stepDown();break;
       case 'none':break;
       default: throw new Error(`Unsupported stepper. (${stepper})`);
     }
-    // const wrap = input.closest('.ui-input-stepper');
-    if(wrap.classList.contains('ui-input-stepper-data-value')){
-      wrap.dataset.value = input.value;
+  }
+
+  /**
+   * sync data-value attrubite
+   *
+   * @static
+   * @param {HTMLInputElement} input 
+   * @param {?HTMLElement} [wrap=null] 없으면 가까운 것을 찾아 사용함
+   */
+  static syncDataValue(input,wrap=null){
+    if(wrap===null){
+      wrap = input.closest('.ui-input-stepper');
     }
-    wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{
-      el.dataset.value = input.value;
-    })
-   
+    if(wrap){
+      const valueToFixed = wrap.dataset.valueToFixed; //설정이 없다면 step의 자리수로 강제함.
+      const valueMultipler = wrap.dataset.valueMultipler??'1';
+      let value = input.valueAsNumber;
+      if(valueMultipler!==1){ value *=parseFloat(valueMultipler); }
+      if(valueToFixed!==undefined){ value = value.toFixed(parseInt(valueToFixed)) }
+      else{value = value.toString();}
+
+      if(wrap.classList.contains('ui-input-stepper-data-value')){ wrap.dataset.value = value; }
+      wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{ el.dataset.value = value; })
+    }
   }
   
   /**
@@ -97,12 +111,12 @@ class UiInputStepper{
    * @param {string} stepper step type up/down/none
    * @param {Event} [event=null] relative event
    */
-  static setTimeout(wrap,input,stepper,event=null){
+  static setTimeout(input,stepper,wrap=null){
     if(this.tm){ clearTimeout(this.tm); }
     this.tm = setTimeout(() => {
-      this.step(wrap,input,stepper,event);
+      this.step(input,stepper);
       this.dispatchInput(input);
-      this.setTimeout(wrap,input,stepper,event);
+      this.setTimeout(input,stepper,wrap);
     }, this.currentDelay);
     
     // const wrap = input.closest('.ui-input-stepper');  
@@ -119,18 +133,19 @@ class UiInputStepper{
    * @param {Event} event 
    */
   static onpointerdown = (event)=>{
-    const target = event.target;
-    const wrap = target.closest('.ui-input-stepper')
+    const btn = event.target;
+    if(!btn.classList.contains('btn-stepper')){ return; }
+    const wrap = btn.closest('.ui-input-stepper')
     if(!wrap){ return;}
-    const input = wrap.querySelector('input');
+    const input = wrap.querySelector('input:where([type="number"],[type="range"])')
     if(!input){ return; }
-    if(!target.dataset.stepper){ return; }
-    const stepper = target.dataset.stepper
+    if(!btn.dataset.stepper){ return; }
+    const stepper = btn.dataset.stepper
     
-    this.step(wrap,input,stepper,event)
+    this.step(input,stepper)
     this.dispatchInput(input);
     this.currentDelay = parseFloat(wrap.dataset.firstDelay??this.firstDelay);
-    this.setTimeout(wrap,input,stepper,event)
+    this.setTimeout(input,stepper,wrap)
     window.addEventListener('pointerup',this.onpointerup,{once:true});
   }
   
@@ -149,12 +164,11 @@ class UiInputStepper{
    * @param {Event} event 
    */
   static oninput = (event)=>{
-    const target = event.target;
-    const wrap = target.closest('.ui-input-stepper')
+    const input = event.target;
+    if(!input?.stepUp){return;} //숫자관련 input인가?
+    const wrap = input.closest('.ui-input-stepper')
     if(!wrap){ return;}
-    const input = wrap.querySelector('input');
-    if(!input){ return; }
-    this.step(wrap,input,'none',null)
+    this.syncDataValue(input,wrap)
   }
 
   /**
@@ -164,9 +178,7 @@ class UiInputStepper{
    * @param {HTMLInputElement} input 
    */
   static dispatchInput(input){
-    // trigger event
-    const event = new Event('input',{bubbles:true,cancelable:true});
-    input.dispatchEvent(event);
+    input.dispatchEvent((new Event('input',{bubbles:true,cancelable:true})));
   }
       
   
@@ -179,21 +191,28 @@ class UiInputStepper{
   static initDataValue(target=null){
     if(target===null){ target = window.document }
     target.querySelectorAll('.ui-input-stepper').forEach((wrap)=>{
-      const input = wrap.querySelector('input')
-      this.step(wrap,input,'none',null)
+      const input = wrap.querySelector('input:where([type="number"],[type="range"])')
+      if(!input){ return; }
+      this.syncDataValue(input,wrap)
     })
   }
   
+
+
+
+
+
+
   /**
    * Fill data-value from inputElement
    *
+   * @deprecated
+   * @alias syncDataValue
    * @static
    * @param {HTMLInputElement} input 
    */
   static dataValueFromInput(input){
-    const wrap = input.closest('.ui-input-stepper');
-    if(!wrap) return;
-    this.step(wrap,input,'none',null)
+    return this.syncDataValue(input);
   }
 
   
