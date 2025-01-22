@@ -64,24 +64,10 @@ class UiInputStepper{
     }
     // const wrap = input.closest('.ui-input-stepper');
     if(wrap.classList.contains('ui-input-stepper-data-value')){
-      if(wrap.oninput){
-        if(event===null || event.type!='input'){ 
-          const fakeEvent = { type: 'input', target: input, timeStamp: Date.now(),}
-          wrap.oninput(fakeEvent)
-        }
-      }else{
-        wrap.dataset.value = input.value;
-      }
+      wrap.dataset.value = input.value;
     }
     wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{
-      if(el.oninput){
-        if(event===null || event.type!='input'){ 
-          const fakeEvent = { type: 'input', target: input, timeStamp: Date.now(),}
-          el.oninput(fakeEvent)
-        }
-      }else{
-        el.dataset.value = input.value;
-      }
+      el.dataset.value = input.value;
     })
    
   }
