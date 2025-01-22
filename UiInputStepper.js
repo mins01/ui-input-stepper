@@ -74,15 +74,28 @@ class UiInputStepper{
       wrap = input.closest('.ui-input-stepper');
     }
     if(wrap){
-      const valueToFixed = wrap.dataset.valueToFixed; //설정이 없다면 step의 자리수로 강제함.
-      const valueMultipler = wrap.dataset.valueMultipler??'1';
-      let value = input.valueAsNumber;
-      if(valueMultipler!==1){ value *=parseFloat(valueMultipler); }
-      if(valueToFixed!==undefined){ value = value.toFixed(parseInt(valueToFixed)) }
-      else{value = value.toString();}
+      
 
-      if(wrap.classList.contains('ui-input-stepper-data-value')){ wrap.dataset.value = value; }
-      wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{ el.dataset.value = value; })
+      if(wrap.classList.contains('ui-input-stepper-data-value')){ 
+        const valueMultipler = wrap.dataset.valueMultipler??'1';
+        const valueToFixed = wrap.dataset.valueToFixed;
+        let value = input.valueAsNumber;
+        if(valueMultipler!==1){ value *=parseFloat(valueMultipler); }
+        if(valueToFixed!==undefined){ value = value.toFixed(parseInt(valueToFixed)) }
+        else{value = value.toString();}
+
+        wrap.dataset.value = value; 
+      }
+      wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{ 
+        const valueMultipler = el.dataset.valueMultipler??'1';
+        const valueToFixed = el.dataset.valueToFixed;
+        let value = input.valueAsNumber;
+        if(valueMultipler!==1){ value *=parseFloat(valueMultipler); }
+        if(valueToFixed!==undefined){ value = value.toFixed(parseInt(valueToFixed)) }
+        else{value = value.toString();}
+
+        el.dataset.value = value; 
+      })
     }
   }
   
