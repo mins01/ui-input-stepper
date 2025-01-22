@@ -112,6 +112,7 @@ class UiInputStepper{
    * @param {Event} [event=null] relative event
    */
   static setTimeout(wrap,input,stepper,event=null){
+    if(this.tm){ clearTimeout(this.tm); }
     this.tm = setTimeout(() => {
       this.step(wrap,input,stepper,event);
       this.dispatchInput(input);
