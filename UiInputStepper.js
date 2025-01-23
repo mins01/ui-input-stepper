@@ -33,6 +33,7 @@ class UiInputStepper{
   static addEventListener(target=window){
     target.addEventListener('pointerdown',this.onpointerdown)
     target.addEventListener('input',this.oninput)
+    target.addEventListener('change',this.onchange)
   }
 
   /**
@@ -44,6 +45,7 @@ class UiInputStepper{
   static removeEventListener(target=window){
     target.removeEventListener('pointerdown',this.onpointerdown)
     target.removeEventListener('input',this.oninput)
+    target.removeEventListener('change',this.onchange)
   }
 
   /**
@@ -182,6 +184,16 @@ class UiInputStepper{
     const wrap = input.closest('.ui-input-stepper')
     if(!wrap){ return;}
     this.syncDataValue(input,wrap)
+  }
+
+  /**
+   * Description placeholder
+   *
+   * @alias oninput
+   * @param {Event} event 
+   */
+  static onchange = (event)=>{
+    this.oninput(event);
   }
 
   /**
