@@ -44,10 +44,23 @@
             UiInputStepper.initDataValue()
         })
     </script>
-    
+    <!-- <style>
+        input[type="range"]{
+            touch-action: none;
+        }
+        input::-webkit-slider-runnable-track{
+            touch-action: none;
+        }
+        input::-webkit-slider-thumb{
+            touch-action: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    </style>     -->
+
 </head>
 <body>
-    <div class="container text-break" oninput="console.log(event)"  onchange="console.log(event)">
+    <div class="container text-break" oninput="console.log(event.eventPhase)"  onchange="console.log(event)">
         <h1>ui-input-stepper</h1>
         <hr>
         <a class="btn btn-link" href="https://github.com/mins01/ui-input-stepper">github</a>
@@ -88,6 +101,13 @@
         <div class="input-group my-1 ui-input-stepper">
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
+                <input class="w-100 d-block" type="range" style="height: 1lh;" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>   
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
                 <input class="form-range d-block" type="range" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
@@ -116,7 +136,7 @@
         <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" >
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
-                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+                <input list="datalist-test" class="form-range d-block"  type="range" min="-180" step="45" max="180"  value="-45" style="appearance: auto;" >
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>
@@ -124,7 +144,6 @@
             <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
             <div class="form-control">
                 <input list="datalist-test"  class="d-block w-100" type="range" min="-180" step="45" max="180"  value="-45" >
-                       
             </div>
             <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
         </div>        
