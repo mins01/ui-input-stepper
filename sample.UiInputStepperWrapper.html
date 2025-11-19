@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko" >
+<head>
+    <title>ui-input-stepper-wrapper</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="/favicon.ico"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="/js/ForGoogle.js"></script>
+    <!-- google analytics -->
+    <script>if(window.ForGoogle){ ForGoogle.analytics() }else{ console.log("failure : ForGoogle.analytics()");}</script>
+    
+
+    <!-- jquery 관련 -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
+
+    <!-- 부트스트랩 5.3.x -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel=" stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> -->
+
+    <!-- vue.js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    
+    <!-- meta og -->
+    
+    <meta property="og:title" content="ui-input-stepper-wrapper">
+    <meta property="og:description" content="ui-input-stepper-wrapper">
+    <meta name="og:image" content="http://www.mins01.com/img/logo.gif">
+    <meta property="og:image:width" content="190">
+    <meta property="og:image:height" content="70" />
+    <meta property="og:site_name" content="ui-input-stepper-wrapper" />
+    <meta property="og:type" content="website">
+    
+    <!-- //meta og -->
+    <!-- <link rel=" stylesheet" href="ui-input-stepper-wrapper.css"> -->
+    <!-- <script src="UiInputStepper.js"></script> -->
+    <script src="UiInputStepperWrapper.js"></script>
+    <script>
+        window.addEventListener('load',(event)=>{
+            UiInputStepperWrapper.defineCustomElement();
+        })
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>ui-input-stepper-wrapper</h1>
+        <hr>
+        <div class="my-3">
+            <h4>기본 모양</h4>
+            <ui-input-stepper-wrapper>
+                <div>
+                    <input type="range" value="0" min="-1000" max="1000">
+                    <output></output>
+                </div>
+                <div>
+                    <button type="button" data-action="down">down</button>
+                    <button type="button" data-action="up">up</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>input[type="number"]</h4>
+            <ui-input-stepper-wrapper>
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <input class="form-control" type="number" value="1" >
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>input[type="range"] with output</h4>
+            <ui-input-stepper-wrapper>
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <div class="form-control position-relative">
+                        <input class="form-range h-100" type="range" min="-10" step="0.01" max="10"  value="2.42" >
+                        <output class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center pe-none" ></output>
+                    </div>
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>data-step-increment="5"</h4>
+            <ui-input-stepper-wrapper>
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-step-increment="5" data-action="down">-5 stepIncrement</button>
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <div class="form-control position-relative">
+                        <input class="form-range" type="range" min="-10" step="0.01" max="10"  value="2.42" >
+                        <output class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center pe-none" ></output>
+                    </div>
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                    <button class="btn btn-outline-primary" data-step-increment="5" data-action="up">+5 stepIncrement</button>
+                    <button class="btn btn-outline-primary" onclick="this.closest('ui-input-stepper-wrapper').value = 0;">0</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>first-delay="1" 최고속 이동</h4>
+            <ui-input-stepper-wrapper 
+                first-delay="1"
+                min-delay="1"
+            >
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <div class="form-control position-relative">
+                        <input class="form-range" type="range" min="-10" step="0.01" max="10"  value="2.42" >
+                        <output class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center pe-none" ></output>
+                    </div>
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>delay-multiplier=1 등속 이동</h4>
+            <ui-input-stepper-wrapper 
+                delay-multiplier="1"
+            >
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <div class="form-control position-relative">
+                        <input class="form-range" type="range" min="-10" step="0.01" max="10"  value="2.42" >
+                        <output class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center pe-none" ></output>
+                    </div>
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>delay-multiplier="1.1" max-delay="3000" 점점 느려지는 이동</h4>
+            <ui-input-stepper-wrapper 
+                delay-multiplier="1.1"
+                max-delay="3000"
+            >
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <div class="form-control position-relative">
+                        <input class="form-range" type="range" min="-10" step="0.01" max="10"  value="2.42" >
+                        <output class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center pe-none" ></output>
+                    </div>
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>formattedOutput 재정의</h4>
+            <ui-input-stepper-wrapper id="ui-input-stepper-wrapper-formatedOuput" >
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <div class="form-control position-relative">
+                        <input class="form-range" type="range" min="-100000000" step="0.1" max="100000000"  value="10002.1" >
+                        <output class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center pe-none" ></output>
+                    </div>
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                </div>
+            </ui-input-stepper-wrapper>
+            <script>
+                window.addEventListener('load',(event)=>{
+                    const t = document.querySelector('#ui-input-stepper-wrapper-formatedOuput');
+                    t.formattedOutput = function(v){
+                        return parseFloat(v).toLocaleString()
+                    }
+                    t.sync();
+                })
+            </script>
+        </div>
+    </div>
+</body>
+</html>
