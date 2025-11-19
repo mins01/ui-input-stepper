@@ -51,7 +51,21 @@
         <h1>ui-input-stepper-wrapper</h1>
         <hr>
         <div class="my-3">
-            <h4>기본 모양</h4>
+            <h4>SAMPLE - number</h4>
+            <ui-input-stepper-wrapper>
+                <div>
+                    <input type="number" value="0" min="-1000" max="1000">
+                    <output></output>
+                </div>
+                <div>
+                    <button type="button" data-action="down">down</button>
+                    <button type="button" data-action="up">up</button>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
+        <hr>
+        <div class="my-3">
+            <h4>SAMPLE - range</h4>
             <ui-input-stepper-wrapper>
                 <div>
                     <input type="range" value="0" min="-1000" max="1000">
@@ -64,6 +78,7 @@
             </ui-input-stepper-wrapper>
         </div>
         <hr>
+        <h3>with Bootstrap 5</h3>
         <div class="my-3">
             <h4>input[type="number"]</h4>
             <ui-input-stepper-wrapper>
@@ -74,7 +89,17 @@
                 </div>
             </ui-input-stepper-wrapper>
         </div>
-        <hr>
+        <div class="my-3">
+            <h4>input[type="number"] with output</h4>
+            <ui-input-stepper-wrapper>
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <input class="form-control" type="number" value="1" >
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                    <output class="form-control"></output>
+                </div>
+            </ui-input-stepper-wrapper>
+        </div>
         <div class="my-3">
             <h4>input[type="range"] with output</h4>
             <ui-input-stepper-wrapper>
@@ -88,7 +113,6 @@
                 </div>
             </ui-input-stepper-wrapper>
         </div>
-        <hr>
         <div class="my-3">
             <h4>data-step-increment="5"</h4>
             <ui-input-stepper-wrapper>
@@ -105,7 +129,6 @@
                 </div>
             </ui-input-stepper-wrapper>
         </div>
-        <hr>
         <div class="my-3">
             <h4>first-delay="1" 최고속 이동</h4>
             <ui-input-stepper-wrapper 
@@ -122,7 +145,6 @@
                 </div>
             </ui-input-stepper-wrapper>
         </div>
-        <hr>
         <div class="my-3">
             <h4>delay-multiplier=1 등속 이동</h4>
             <ui-input-stepper-wrapper 
@@ -138,7 +160,6 @@
                 </div>
             </ui-input-stepper-wrapper>
         </div>
-        <hr>
         <div class="my-3">
             <h4>delay-multiplier="1.1" max-delay="3000" 점점 느려지는 이동</h4>
             <ui-input-stepper-wrapper 
@@ -155,7 +176,6 @@
                 </div>
             </ui-input-stepper-wrapper>
         </div>
-        <hr>
         <div class="my-3">
             <h4>formattedOutput 재정의</h4>
             <ui-input-stepper-wrapper id="ui-input-stepper-wrapper-formatedOuput" >
@@ -174,14 +194,13 @@
                     t.formattedOutput = function(v){
                         return parseFloat(v).toLocaleString()
                     }
-                    t.sync();
+                    t.syncValue();
                 })
             </script>
         </div>
-        <hr>
         <div class="my-3">
             <h4>애트리뷰트 formatted-output</h4>
-            <ui-input-stepper-wrapper  formatted-output="return 'VALUE: '+value;">
+            <ui-input-stepper-wrapper  formatted-output="VALUE: {value} ${x}">
                 <div class="input-group">
                     <button class="btn btn-outline-primary" data-action="down">-</button>
                     <div class="form-control position-relative">
@@ -191,7 +210,19 @@
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
             </ui-input-stepper-wrapper>
-            
+        </div>
+        <div class="my-3">
+            <h4>애트리뷰트 formatted-output</h4>
+            <ui-input-stepper-wrapper  formatted-output="무게: {value} Kg">
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" data-action="down">-</button>
+                    <div class="form-control position-relative">
+                        <input class="form-range h-100" type="range" min="-100000000" step="0.1" max="100000000"  value="10002.1" >
+                        <output class="position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center pe-none" ></output>
+                    </div>
+                    <button class="btn btn-outline-primary" data-action="up">+</button>
+                </div>
+            </ui-input-stepper-wrapper>
         </div>
     </div>
 </body>
