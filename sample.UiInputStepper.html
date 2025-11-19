@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ko" >
+<head>
+    <title>ui-input-stepper</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="/favicon.ico"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="/js/ForGoogle.js"></script>
+    <!-- google analytics -->
+    <script>if(window.ForGoogle){ ForGoogle.analytics() }else{ console.log("failure : ForGoogle.analytics()");}</script>
+    
+
+    <!-- jquery 관련 -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
+
+    <!-- 부트스트랩 5.3.x -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel=" stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> -->
+
+    <!-- vue.js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    
+    <!-- meta og -->
+    
+    <meta property="og:title" content="ui-input-stepper">
+    <meta property="og:description" content="ui-input-stepper">
+    <meta name="og:image" content="http://www.mins01.com/img/logo.gif">
+    <meta property="og:image:width" content="190">
+    <meta property="og:image:height" content="70" />
+    <meta property="og:site_name" content="ui-input-stepper" />
+    <meta property="og:type" content="website">
+    
+    <!-- //meta og -->
+     <link rel=" stylesheet" href="ui-input-stepper.css">
+    <script src="UiInputStepper.js"></script>
+    <script>
+        UiInputStepper.addEventListener();
+        window.addEventListener('load',(event)=>{
+            UiInputStepper.initDataValue()
+        })
+    </script>
+    <!-- <style>
+        input[type="range"]{
+            touch-action: none;
+        }
+        input::-webkit-slider-runnable-track{
+            touch-action: none;
+        }
+        input::-webkit-slider-thumb{
+            touch-action: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    </style>     -->
+
+</head>
+<body>
+    <div class="container text-break" oninput="console.log(event.eventPhase)"  onchange="console.log(event)">
+        <h1>ui-input-stepper</h1>
+        <hr>
+        <a class="btn btn-link" href="https://github.com/mins01/ui-input-stepper">github</a>
+        <a class="btn btn-link" href="https://mins01.github.io/ui-input-stepper/">ex</a>
+        <hr>
+        <h2>input[type="number"]</h2>
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <input class="form-control" type="number" >
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <input class="form-control" type="number" min="-10" step="0.1" step="0.1" max="999"  value="0" >
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <input class="form-control" type="number" min="-10" step="0.1" step="0.1" max="999"  value="0" >
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-value-suffix="px">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-none" type="number" min="-1" step="0.01" max="1"  value="0" >
+                <out></out>
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+
+        <span class="ui-input-stepper">
+            <button class="btn-stepper" data-stepper="down">-</button>
+            <input type="number" min="-1" step="0.01" max="1"  value="0" >
+            <button class="btn-stepper" data-stepper="up">+</button>
+        </span>
+        <hr>
+        <h2>input[type="range"]</h2>
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="w-100 d-block" type="range" style="height: 1lh;" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>        
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-10" step="0.1" max="999"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-10" step="0.1" max="999"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" >
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" >
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input list="datalist-test" class="form-range d-block"  type="range" min="-180" step="45" max="180"  value="-45" style="appearance: auto;" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value"  data-value-suffix="°">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input list="datalist-test"  class="d-block w-100" type="range" min="-180" step="45" max="180"  value="-45" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>        
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" >
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input  class="form-range d-block" type="range" min="-1" step="0.25" max="1"  value="0.25" >
+                <datalist id="datalist-test" class="w-100" style="display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                writing-mode: vertical-lr;">
+                    <option value="-180">-180°</option>
+                    <option value="-135">-135°</option>
+                    <option value="-90">-90°</option>
+                    <option value="-45">-45°</option>
+                    <option value="0">0°</option>
+                    <option value="45">45°</option>
+                    <option value="90">90°</option>
+                    <option value="135">135°</option>
+                    <option value="180">180°</option>
+                </datalist>                
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" style="color: #000;" >
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" style="color: #fff;" >
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" style="color: #999;" >
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <span class="ui-input-stepper ui-input-stepper-data-value">
+            <button class="btn-stepper" data-stepper="down">-</button>
+            <input type="range" min="-1" step="0.01" max="1"  value="0" >
+            <button class="btn-stepper" data-stepper="up">+</button>
+        </span>
+        <hr>
+        <h2>input[type="text"] (not working)</h2>
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <input class="form-control" type="text" >
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>           
+        <div class="input-group my-1 ui-input-stepper">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <input class="form-control" type="text" min="-10" step="0.1" max="999"  value="0" >
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <hr>
+        <h2>attribute : data-first-delay=10</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-first-delay="10">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <h2>attribute : data-first-multipler=0.8</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-delay-multipler="0.8">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <h2>attribute : data-first-multipler=1.2</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-delay-multipler="1.2" data-first-delay=10>
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <h2>attribute : data-min-delay=200</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <hr>
+        <h2>UiInputStepper.dataValueFromInput(input); @deprecated</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" id="test-dataValueFromInput" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div>
+            <button type="btn btn-primary" type="button" onclick=" document.querySelector('#test-dataValueFromInput').value=Math.random()*2-1; UiInputStepper.dataValueFromInput(document.querySelector('#test-dataValueFromInput'))" >TEST</button>
+        </div>
+
+        <h2>UiInputStepper.syncDataValue(input,wrap=null)</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" id="test-syncDataValue" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div>
+            <button type="btn btn-primary" type="button" onclick=" document.querySelector('#test-syncDataValue').value=Math.random()*2-1; UiInputStepper.syncDataValue(document.querySelector('#test-syncDataValue'))" >TEST</button>
+        </div>
+        <hr>
+        <h2>multiple ui-input-stepper-data-value</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-min-delay="200" data-delay-multipler="0.1">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+            <div class="form-control ui-input-stepper-data-value">
+                HELLO
+            </div>
+        </div>
+        <div class="input-group my-1 ui-input-stepper" data-min-delay="200" data-delay-multipler="0.1">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+            <div class="form-control ui-input-stepper-data-value" >
+                
+            </div>
+        </div>
+        <hr>
+        <h2>attribute: data-value-prefix / data-value-suffix</h2>
+        <div class="input-group my-1 ui-input-stepper ui-input-stepper-data-value" data-value-prefix="[XX " data-value-suffix=" °UNIT]">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control">
+                <input class="form-range d-block" type="range" min="-1" step="0.01" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <hr>
+        <h2>attribute: data-value-multipler / data-value-to-fixed </h2>
+        <div class="input-group my-1 ui-input-stepper " >
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control ui-input-stepper-data-value" data-value-multipler="100" data-value-suffix="%">
+                <input class="form-range d-block" type="range" min="-1" step="0.0001" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control ui-input-stepper-data-value"  data-value-to-fixed="1">
+                <input class="form-range d-block" type="range" min="-1" step="0.0001" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+        <div class="input-group my-1 ui-input-stepper ">
+            <button class="btn btn-primary btn-stepper" data-stepper="down">-</button>
+            <div class="form-control ui-input-stepper-data-value"  data-value-multipler="100" data-value-suffix="%" data-value-to-fixed="2">
+                <input class="form-range d-block" type="range" min="-1" step="0.0001" max="1"  value="0" >
+            </div>
+            <button class="btn btn-primary btn-stepper" data-stepper="up">+</button>
+        </div>
+
+
+        
+    </div>
+</body>
+</html>
