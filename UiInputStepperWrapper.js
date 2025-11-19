@@ -37,9 +37,8 @@ class UiInputStepperWrapper extends HTMLElement  {
   // }
   pointerdownHandler(event){
     const target = event.target;
-    this.clearValueinput();
+    this.clearValueElements();
     if(target.dataset?.action=='up'){
-      
       this.setPointerCapture(event.pointerId); // 포인터 캡처 시작
       this.stopRepeat()
       this.delay = this.firstDelay;
@@ -57,11 +56,18 @@ class UiInputStepperWrapper extends HTMLElement  {
   pointerupHandler(event){
     this.releasePointerCapture(event.pointerId); // 포인터 캡처 시작
     this.stopRepeat()
+    this.clearValueElements();
   }
 
-
+  clearValueElements(){
+    this.clearValueinput()
+    this.clearValueOutput()
+  }
   clearValueinput(){
     this.#valueInput = null;
+  }
+  clearValueOutput(){
+    this.#valueOutput = null;
   }
   get valueInput(){
      //속도를 위한 캐싱
@@ -69,10 +75,7 @@ class UiInputStepperWrapper extends HTMLElement  {
     return this.#valueInput;
   }
 
-  clearValueOutput(){
-    this.#valueOutput = null;
-  }
-  get targetOutput(){
+  get valueOutput(){
      //속도를 위한 캐싱
     if(!this.#valueOutput){ this.#valueOutput = this.querySelector('output'); }
     return this.#valueOutput;
@@ -112,12 +115,12 @@ class UiInputStepperWrapper extends HTMLElement  {
     this.syncOutput();
   }
   syncOutput(){
-    if(this.targetOutput) this.targetOutput.textContent = this.formattedOutput(this?.valueInput?.value);
+    if(this.valueOutput) this.valueOutput.textContent = this.formattedOutput(this?.valueInput?.value);
   }
 
   // 이거 재선언해서 사용하자.
-  formattedOutput(v){
-    return v;
+  formattedOutput(value){
+    return value;
   }
   
   
@@ -129,8 +132,8 @@ class UiInputStepperWrapper extends HTMLElement  {
       "delay-multiplier",
       "min-delay",
       "max-delay",
+      "formatted-output",
     ];
-
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -138,5 +141,6 @@ class UiInputStepperWrapper extends HTMLElement  {
     else if (name === "delay-multiplier") { this.delayMultiplier = parseFloat(newValue); }
     else if (name === "min-delay") { this.minDelay = parseFloat(newValue); }
     else if (name === "max-delay") { this.maxDelay = parseFloat(newValue); }
+    else if (name === "formatted-output") { this.formattedOutput = new Function('value', newValue); this.sync(); }
   }
 }
