@@ -56,11 +56,15 @@ class UiInputStepper{
    * @param {string} stepper step type up/down/none
    */
   static step(input,stepper){
+    const brefore = input.valueAsNumber;
     switch(stepper){
       case 'up':input.stepUp();break;
       case 'down':input.stepDown();break;
       case 'none':break;
       default: throw new Error(`Unsupported stepper. (${stepper})`);
+    }
+    if(input.valueAsNumber!==brefore){ 
+      this.dispatchInput(input);
     }
   }
 
@@ -130,7 +134,6 @@ class UiInputStepper{
     if(this.tm){ clearTimeout(this.tm); }
     this.tm = setTimeout(() => {
       this.step(input,stepper);
-      this.dispatchInput(input);
       this.setTimeout(input,stepper,wrap);
     }, this.currentDelay);
     
@@ -142,7 +145,9 @@ class UiInputStepper{
     
   } 
   
-  /**
+
+  static valueAtDown = null
+    /**
    * onpointerdown process method
    *
    * @param {Event} event 
@@ -155,13 +160,15 @@ class UiInputStepper{
     const input = wrap.querySelector('input:where([type="number"],[type="range"])')
     if(!input){ return; }
     if(!btn.dataset.stepper){ return; }
-    const stepper = btn.dataset.stepper
-    
+    this.valueAtDown = input.valueAsNumber;
+    const stepper = btn.dataset.stepper   
     this.step(input,stepper)
-    this.dispatchInput(input);
     this.currentDelay = parseFloat(wrap.dataset.firstDelay??this.firstDelay);
     this.setTimeout(input,stepper,wrap)
+    
+    btn.setPointerCapture(event.pointerId);
     window.addEventListener('pointerup',this.onpointerup,{once:true});
+    window.addEventListener('pointercancel',this.onpointerup,{once:true});
   }
   
   /**
@@ -170,7 +177,20 @@ class UiInputStepper{
    * @param {Event} event 
    */
   static onpointerup = (event)=>{
+    const btn = event.target;
+    btn.releasePointerCapture(event.pointerId);
+    if(!btn.classList.contains('btn-stepper')){ return; }
+    const wrap = btn.closest('.ui-input-stepper')
+    if(!wrap){ return;}
+    const input = wrap.querySelector('input:where([type="number"],[type="range"])')
+    if(!input){ return; }
+    
     if(this.tm){clearTimeout(this.tm);}
+
+    if(this.valueAtDown !== input.valueAsNumber){
+      this.dispatchChange(input);
+    }
+    this.valueAtDown = null;
   }
 
   /**
@@ -204,6 +224,9 @@ class UiInputStepper{
    */
   static dispatchInput(input){
     input.dispatchEvent((new Event('input',{bubbles:true,cancelable:true})));
+  }
+  static dispatchChange(input){
+    input.dispatchEvent((new Event('change',{bubbles:true,cancelable:true})));
   }
       
   
