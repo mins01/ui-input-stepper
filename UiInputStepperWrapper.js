@@ -29,8 +29,10 @@ class UiInputStepperWrapper extends HTMLElement  {
 
   static defineCustomElement(name='ui-input-stepper-wrapper'){
       if(!globalThis.window){return;}
-      window.customElements.define(name, this);
-      console.debug('defineCustomElement',name);
+      if(!customElements.get(name)){
+        customElements.define(name, this);
+        console.debug('defineCustomElement',name);
+      }
   }
 
   connectedCallback() {
@@ -38,25 +40,28 @@ class UiInputStepperWrapper extends HTMLElement  {
     this.syncValue();
   }
   pointerdownHandler(event){
-    const target = event.target;
+    const target = event.target.closest('[data-action]');
+    if(!target) return;
     this.clearValueElements();
     if(target.dataset?.action=='up'){
       this.setPointerCapture(event.pointerId); // 포인터 캡처 시작
       this.stopRepeat()
       this.delay = this.firstDelay;
-      const stepIncrement = parseInt(target.dataset?.stepIncrement??'1',10);
+      const v = parseInt(target.dataset?.stepIncrement,10); // 증가 값이 아니라 step 횟수다
+      const stepIncrement = Number.isFinite(v) ? v : 1;
       this.repeatStepUp(stepIncrement)
     }
     if(target.dataset?.action=='down'){
       this.setPointerCapture(event.pointerId); // 포인터 캡처 시작
       this.stopRepeat()
       this.delay = this.firstDelay;
-      const stepIncrement = parseInt(target.dataset?.stepIncrement??'1',10);
+      const v = parseInt(target.dataset?.stepIncrement,10); // 증가 값이 아니라 step 횟수다
+      const stepIncrement = Number.isFinite(v) ? v : 1;
       this.repeatStepDown(stepIncrement)
     }
   }
   pointerupHandler(event){
-    this.releasePointerCapture(event.pointerId); // 포인터 캡처 시작
+    if(this.hasPointerCapture(event.pointerId)) { this.releasePointerCapture(event.pointerId); }
     this.stopRepeat()
     this.clearValueElements();
   }
@@ -84,10 +89,10 @@ class UiInputStepperWrapper extends HTMLElement  {
   }
 
   get value(){
-    return this?.valueInput?.value;
+    return this.valueInput?.value;
   }
   set value(v){
-    if(this?.valueInput) this.valueInput.value = v;
+    if(this.valueInput) this.valueInput.value = v;
     this.syncValue();
   }
 
