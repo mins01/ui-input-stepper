@@ -25,6 +25,7 @@ class UiInputStepperWrapper extends HTMLElement  {
     this.addEventListener('pointerup',this.pointerupHandler)
     this.addEventListener('pointercancel',this.pointerupHandler)
     this.addEventListener('input',()=>{ this.syncValue() })
+    this.addEventListener('change',()=>{ this.syncValue() })
   }
 
   static defineCustomElement(name='ui-input-stepper-wrapper'){
@@ -39,31 +40,34 @@ class UiInputStepperWrapper extends HTMLElement  {
     //  console.log("<div is='ui-input-stepper-wrapper'> attached.");
     this.syncValue();
   }
+  valueAtDown = null;
   pointerdownHandler(event){
     const target = event.target.closest('[data-action]');
     if(!target) return;
     this.clearValueElements();
-    if(target.dataset?.action=='up'){
-      this.setPointerCapture(event.pointerId); // 포인터 캡처 시작
+    this.valueAtDown = this.value
+    if(target.dataset?.action){
       this.stopRepeat()
+      this.setPointerCapture(event.pointerId); // 포인터 캡처 시작
       this.delay = this.firstDelay;
       const v = parseInt(target.dataset?.stepIncrement,10); // 증가 값이 아니라 step 횟수다
       const stepIncrement = Number.isFinite(v) ? v : 1;
-      this.repeatStepUp(stepIncrement)
-    }
-    if(target.dataset?.action=='down'){
-      this.setPointerCapture(event.pointerId); // 포인터 캡처 시작
-      this.stopRepeat()
-      this.delay = this.firstDelay;
-      const v = parseInt(target.dataset?.stepIncrement,10); // 증가 값이 아니라 step 횟수다
-      const stepIncrement = Number.isFinite(v) ? v : 1;
-      this.repeatStepDown(stepIncrement)
+      if(target.dataset?.action=='up'){
+        this.repeatStepUp(stepIncrement)
+      }
+      if(target.dataset?.action=='down'){
+        this.repeatStepDown(stepIncrement)
+      }
     }
   }
   pointerupHandler(event){
-    if(this.hasPointerCapture(event.pointerId)) { this.releasePointerCapture(event.pointerId); }
-    this.stopRepeat()
-    this.clearValueElements();
+    if(this.hasPointerCapture(event.pointerId)) { 
+      this.releasePointerCapture(event.pointerId); 
+      this.stopRepeat()
+      this.clearValueElements();
+      if(this.valueAtDown !== this.value){ this.valueInput.dispatchEvent(new Event('change',{bubbles:true,cancelable:false})); }
+      this.valueAtDown = null;
+    }
   }
 
   clearValueElements(){
@@ -92,20 +96,32 @@ class UiInputStepperWrapper extends HTMLElement  {
     return this.valueInput?.value;
   }
   set value(v){
-    if(this.valueInput) this.valueInput.value = v;
+    if(this.valueInput){
+      const before = this.valueInput.value
+      this.valueInput.value = v;
+
+      if(before !== String(v)){
+        this.valueInput.dispatchEvent(new Event('input',{bubbles:true,cancelable:false})); 
+        this.valueInput.dispatchEvent(new Event('change',{bubbles:true,cancelable:false})); 
+      }
+    }
     this.syncValue();
   }
 
 
   repeatStepUp(stepIncrement=1){
+    const before = this.value
     this.stepUp(stepIncrement);
     this.#tmId = setTimeout(()=>{ this.repeatStepUp(stepIncrement); },this.delay)
     this.delay = Math.min(Math.max(this.delay * this.delayMultiplier, this.minDelay),this.maxDelay);
+    if(before !== this.value){ this.valueInput.dispatchEvent(new Event('input',{bubbles:true,cancelable:false})); }
   }
   repeatStepDown(stepIncrement=1){
+    const before = this.value    
     this.stepDown(stepIncrement);
     this.#tmId = setTimeout(()=>{ this.repeatStepDown(stepIncrement); },this.delay)
     this.delay = Math.min(Math.max(this.delay * this.delayMultiplier, this.minDelay),this.maxDelay);
+    if(before !== this.value){ this.valueInput.dispatchEvent(new Event('input',{bubbles:true,cancelable:false})); }
   }
   stopRepeat(){
     if(this.#tmId){clearTimeout(this.#tmId); this.#tmId = null;}
@@ -118,11 +134,20 @@ class UiInputStepperWrapper extends HTMLElement  {
     this?.valueInput?.stepDown(v); 
     this.syncValue();
   }
+
+  syncValueScheduled = false;
   syncValue(){
-    this.syncValueOutput();
+    if(this.syncValueScheduled) return;
+
+    this.syncValueScheduled = true;
+
+    queueMicrotask(()=>{
+      this.syncValueScheduled = false;
+      this.syncValueOutput();
+    });
   }
   syncValueOutput(){
-    if(this.valueOutput) this.valueOutput.textContent = this.formattedOutput(this.value);
+    if(this.valueOutput) this.valueOutput.textContent = this.formattedOutput(this.value);    
   }
 
   // 이거 재선언해서 사용하자.
