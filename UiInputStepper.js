@@ -8,13 +8,13 @@ class UiInputStepper{
   static firstDelay = 200 // ms
 
   /**
-   * delay multipler
+   * delay multiplier
    * 1 does not change the delay time.
    *
    * @static
    * @type {number}
    */
-  static delayMultipler = 0.96
+  static delayMultiplier = 0.96
 
   /**
    * setTimeout min delay
@@ -91,10 +91,10 @@ class UiInputStepper{
     }
   }
   static formatValue(input, el){
-    const valueMultipler = el.dataset.valueMultipler??'1';
+    const valueMultiplier = el.dataset.valueMultiplier??'1';
     const valueToFixed = el.dataset.valueToFixed;
     let value = input.valueAsNumber;
-    if(valueMultipler!=='1'){ value *=parseFloat(valueMultipler); }
+    if(valueMultiplier!=='1'){ value *=parseFloat(valueMultiplier); }
     if(valueToFixed!==undefined){ value = value.toFixed(parseInt(valueToFixed)) }
     else{value = value.toString();}
 
@@ -137,7 +137,7 @@ class UiInputStepper{
     const v = parseFloat(wrap?.dataset?.minDelay);
     const minDelay = Number.isFinite(v) ? v : this.minDelay;
     if(this.currentDelay > minDelay){
-      this.currentDelay = Math.max(minDelay,this.currentDelay * parseFloat(wrap.dataset.delayMultipler??this.delayMultipler));
+      this.currentDelay = Math.max(minDelay,this.currentDelay * (Number(wrap?.dataset?.delayMultiplier) || this.delayMultiplier));
     }
 
   }
