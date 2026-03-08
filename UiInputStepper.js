@@ -56,14 +56,14 @@ class UiInputStepper{
    * @param {string} stepper step type up/down/none
    */
   static step(input,stepper){
-    const brefore = input.valueAsNumber;
+    const brefore = input.value;
     switch(stepper){
       case 'up':input.stepUp();break;
       case 'down':input.stepDown();break;
       case 'none':break;
       default: throw new Error(`Unsupported stepper. (${stepper})`);
     }
-    if(input.valueAsNumber!==brefore){
+    if(input.value!==brefore){
       this.dispatchInput(input);
     }
   }
@@ -80,10 +80,8 @@ class UiInputStepper{
       wrap = input.closest('.ui-input-stepper');
     }
     if(wrap){
-
-
-      if(wrap.classList.contains('ui-input-stepper-data-value')){
-        this.formatValue(input, wrap)
+      if (wrap.matches('.ui-input-stepper-data-value')) {
+        this.formatValue(input, wrap);
       }
       wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{
         this.formatValue(input, el)
@@ -96,7 +94,7 @@ class UiInputStepper{
     let value = input.valueAsNumber;
     if(valueMultiplier!=='1'){ value *=parseFloat(valueMultiplier); }
     if(valueToFixed!==undefined){ value = value.toFixed(parseInt(valueToFixed)) }
-    else{value = value.toString();}
+    else{value = String(value);}
 
     el.dataset.value = value;
   }
@@ -107,16 +105,13 @@ class UiInputStepper{
    * @static
    * @type {number}
    */
-  static currentDelay = 200;
+  // static currentDelay = 200;
 
-  /**
-   * tm = setTimeout()
-   *
-   * @static
-   * @type {?number}
-   */
-  static tm = null;
-
+  
+  static currentDelayMap = new WeakMap();
+  static timerMap = new WeakMap();
+  static valueAtDownMap = new WeakMap();
+  
   /**
    * Repeated Call
    *
@@ -127,47 +122,65 @@ class UiInputStepper{
    * @param {Event} [event=null] relative event
    */
   static startStepLoop(input,stepper,wrap=null){
-    if(this.tm){ clearTimeout(this.tm); } // 동시 동작 막음!
-    this.tm = setTimeout(() => {
+    if(this.timerMap.has(input)){ 
+      clearTimeout(this.timerMap.get(input)); 
+      this.timerMap.delete(input); 
+    }
+    let currentDelay = this.currentDelayMap.get(input)??this.firstDelay;
+    let timer = setTimeout(() => {
       this.step(input,stepper);
       this.startStepLoop(input,stepper,wrap);
-    }, this.currentDelay);
+    }, currentDelay);
 
     // const wrap = input.closest('.ui-input-stepper');
     const v = parseFloat(wrap?.dataset?.minDelay);
     const minDelay = Number.isFinite(v) ? v : this.minDelay;
-    if(this.currentDelay > minDelay){
-      this.currentDelay = Math.max(minDelay,this.currentDelay * (Number(wrap?.dataset?.delayMultiplier) || this.delayMultiplier));
+    if(currentDelay > minDelay){
+      const mult = Number(wrap?.dataset?.delayMultiplier);
+      const multiplier = Number.isFinite(mult) ? mult : this.delayMultiplier;
+      currentDelay = Math.max(minDelay,currentDelay * multiplier);
     }
-
+    this.currentDelayMap.set(input,currentDelay);
+    this.timerMap.set(input,timer);
+  }
+  static stopStepLoop(input){
+    if(this.timerMap.has(input)){ 
+      clearTimeout(this.timerMap.get(input)); 
+      this.timerMap.delete(input); 
+    }
+    this.currentDelayMap.delete(input);
+    this.valueAtDownMap.delete(input)
   }
 
 
-  static valueAtDown = null
+
     /**
    * onpointerdown process method
    *
    * @param {Event} event
    */
   static onpointerdown = (event)=>{
-    const btn = event.target;
-    if(!btn.classList.contains('btn-stepper')){ return; }
+    const btn = event.target.closest('.btn-stepper');
+    if(!btn){ return; }
     const wrap = btn.closest('.ui-input-stepper')
     if(!wrap){ return;}
     const input = wrap.querySelector('input:where([type="number"],[type="range"])')
     if(!input){ return; }
     if(!btn.dataset.stepper){ return; }
-    this.valueAtDown = input.valueAsNumber;
+    this.valueAtDownMap.set(input,input.valueAsNumber);
     const stepper = btn.dataset.stepper
     this.step(input,stepper)
-    this.currentDelay = parseFloat(wrap?.dataset?.firstDelay??this.firstDelay);
+    this.currentDelayMap.set(input,parseFloat(wrap?.dataset?.firstDelay??this.firstDelay));
+
     this.startStepLoop(input,stepper,wrap)
 
     btn.setPointerCapture(event.pointerId);
-    if (!btn.hasAttribute('data-bound')) {
-      btn.setAttribute('data-bound','1');
+
+    if (!btn._uiInputStepperBound) {
+      btn._uiInputStepperBound = true;
       btn.addEventListener('pointerup',this.onpointerup);
       btn.addEventListener('pointercancel',this.onpointerup);
+      // btn.addEventListener('pointerleave',this.onpointerup); //이 이벤트는 발생 안함.
     }
   }
 
@@ -177,9 +190,8 @@ class UiInputStepper{
    * @param {Event} event
    */
   static onpointerup = (event)=>{
-    console.log('onpointerup',event.type);
-    
-    const btn = event.target;
+    const btn = event.target.closest('.btn-stepper');
+    if(!btn){ return; }
     if(btn.hasPointerCapture(event.pointerId)){
       btn.releasePointerCapture(event.pointerId);
     }
@@ -188,13 +200,11 @@ class UiInputStepper{
     if(!wrap){ return;}
     const input = wrap.querySelector('input:where([type="number"],[type="range"])')
     if(!input){ return; }
-
-    if(this.tm){clearTimeout(this.tm);}
-
-    if(this.valueAtDown !== input.valueAsNumber){
+    
+    if(this.valueAtDownMap.get(input) !== input.valueAsNumber){
       this.dispatchChange(input);
     }
-    this.valueAtDown = null;
+    this.stopStepLoop(input);
   }
 
   /**
