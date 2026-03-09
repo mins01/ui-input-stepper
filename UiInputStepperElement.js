@@ -28,7 +28,7 @@ class UiInputStepperElement extends HTMLElement  {
     this.addEventListener('change',this.inputeventHandler)
   }
 
-  static defineCustomElement(name='ui-input-stepper-wrapper'){
+  static defineCustomElement(name='ui-input-stepper'){
       if(!globalThis.window){return;}
       if(!customElements.get(name)){
         customElements.define(name, this);
