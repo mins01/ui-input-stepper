@@ -48,7 +48,7 @@ class UiInputStepperWrapper extends HTMLElement  {
     this.valueAtDown = this.value
     if(target.dataset?.action){
       this.stopRepeat()
-      this.setPointerCapture(event.pointerId); // 포인터 캡처 시작
+      target.setPointerCapture(event.pointerId); // 포인터 캡처 시작
       this.delay = this.firstDelay;
       const v = parseInt(target.dataset?.stepIncrement,10); // 증가 값이 아니라 step 횟수다
       const stepIncrement = Number.isFinite(v) ? v : 1;
@@ -61,7 +61,9 @@ class UiInputStepperWrapper extends HTMLElement  {
     }
   }
   pointerupHandler(event){
-    if(this.hasPointerCapture(event.pointerId)) { 
+    const target = event.target.closest('[data-action]');
+    if(!target) return;
+    if(target.hasPointerCapture(event.pointerId)) { 
       this.releasePointerCapture(event.pointerId); 
       this.stopRepeat()
       this.clearValueElements();
