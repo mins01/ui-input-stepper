@@ -1,4 +1,4 @@
-class UiInputStepperWrapper extends HTMLElement  {
+class UiInputStepperElement extends HTMLElement  {
   
   static firstDelay = 200; // 시작 딜레이
   static delayMultiplier = 0.96 // 변화량
@@ -24,8 +24,8 @@ class UiInputStepperWrapper extends HTMLElement  {
     this.addEventListener('pointerdown',this.pointerdownHandler)
     this.addEventListener('pointerup',this.pointerupHandler)
     this.addEventListener('pointercancel',this.pointerupHandler)
-    this.addEventListener('input',()=>{ this.syncValue() })
-    this.addEventListener('change',()=>{ this.syncValue() })
+    this.addEventListener('input',this.inputeventHandler)
+    this.addEventListener('change',this.inputeventHandler)
   }
 
   static defineCustomElement(name='ui-input-stepper-wrapper'){
@@ -70,6 +70,10 @@ class UiInputStepperWrapper extends HTMLElement  {
       if(this.valueAtDown !== this.value){ this.valueInput.dispatchEvent(new Event('change',{bubbles:true,cancelable:false})); }
       this.valueAtDown = null;
     }
+  }
+
+  inputeventHandler(event){
+    this.syncValue();
   }
 
   clearValueElements(){
