@@ -80,6 +80,7 @@
                     <button type="button" data-action="down">down</button>
                     <button type="button" data-action="up">up</button>
                     <button type="button" onclick="this.closest('ui-input-stepper-wrapper').value = 5;">5로 설정</button>
+                    <button type="button" onclick="this.closest('ui-input-stepper-wrapper').setValue(10);">10로 설정(이벤트 발생)</button>
                     <button type="button" onclick="alert(this.closest('ui-input-stepper-wrapper').value)">값 확인</button>
 
                 </div>

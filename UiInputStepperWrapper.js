@@ -96,16 +96,19 @@ class UiInputStepperWrapper extends HTMLElement  {
     return this.valueInput?.value;
   }
   set value(v){
-    if(this.valueInput){
-      const before = this.valueInput.value
-      this.valueInput.value = v;
-
-      if(before !== String(v)){
-        this.valueInput.dispatchEvent(new Event('input',{bubbles:true,cancelable:false})); 
-        this.valueInput.dispatchEvent(new Event('change',{bubbles:true,cancelable:false})); 
-      }
-    }
+    if(this.valueInput) this.valueInput.value = v;
     this.syncValue();
+  }
+
+  // with input, change evenot
+  setValue(v){
+    const before = this.value
+    this.value = v;
+
+    if(before !== String(v)){
+      this.valueInput.dispatchEvent(new Event('input',{bubbles:true,cancelable:false})); 
+      this.valueInput.dispatchEvent(new Event('change',{bubbles:true,cancelable:false})); 
+    }
   }
 
 
