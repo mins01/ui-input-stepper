@@ -28,9 +28,11 @@ class UiInputStepperElement extends HTMLElement  {
     this.addEventListener('change',this.inputeventHandler)
   }
 
+  definedName = 'ui-input-stepper'
   static defineCustomElement(name='ui-input-stepper'){
       if(!globalThis.window){return;}
       if(!customElements.get(name)){
+        this.definedName = name;
         customElements.define(name, this);
         console.debug('defineCustomElement',name);
       }
@@ -116,6 +118,7 @@ class UiInputStepperElement extends HTMLElement  {
       this.valueInput.dispatchEvent(new Event('change',{bubbles:true,cancelable:false})); 
     }
   }
+  
 
 
   repeatStepUp(stepIncrement=1){
@@ -142,6 +145,11 @@ class UiInputStepperElement extends HTMLElement  {
   stepDown(v){ 
     this?.valueInput?.stepDown(v); 
     this.syncValue();
+  }
+
+
+  static syncValue(element){
+    element.closest(this.definedName)?.syncValue();
   }
 
   syncValueScheduled = false;

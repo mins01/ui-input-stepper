@@ -66,25 +66,31 @@
                     <button type="button" data-action="down">down</button>
                     <button type="button" data-action="up">up</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <hr>
         <div class="my-3">
             <h4>SAMPLE - range</h4>
             <ui-input-stepper>
                 <div>
-                    <input type="range" value="0" min="-1000" max="1000">
+                    <input type="range" value="0" min="-1000" max="1000" id="">
                     <output></output>
                 </div>
                 <div>
                     <button type="button" data-action="down">down</button>
                     <button type="button" data-action="up">up</button>
-                    <button type="button" onclick="this.closest('ui-input-stepper-element').value = 5;">5로 설정</button>
-                    <button type="button" onclick="this.closest('ui-input-stepper-element').setValue(10);">10로 설정(이벤트 발생)</button>
-                    <button type="button" onclick="alert(this.closest('ui-input-stepper-element').value)">값 확인</button>
+                    <hr>
+                    <button type="button" onclick="this.closest('ui-input-stepper').value = 5;">5로 설정</button>
+                    <button type="button" onclick="this.closest('ui-input-stepper').setValue(10);">10로 설정(이벤트 발생)</button>
+                    <hr>
+                    <button type="button" onclick="this.closest('ui-input-stepper').querySelector('input').valueAsNumber += 10 ;">10증가</button>
+                    <button type="button" onclick="UiInputStepperElement.syncValue(this);">UiInputStepperElement.syncValue(this)</button>
+                    <button type="button" onclick="this.closest('ui-input-stepper').querySelector('input').valueAsNumber += 10 ; UiInputStepperElement.syncValue(this);">10증가 syncValue 호출(이벤트 발생 안함)</button>
+                    <hr>
+                    <button type="button" onclick="alert(this.closest('ui-input-stepper').value)">값 확인</button>
 
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <hr>
         <h3>with Bootstrap 5</h3>
@@ -96,7 +102,7 @@
                     <input class="form-control" type="number" value="1" >
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>input[type="number"] with output</h4>
@@ -107,7 +113,7 @@
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                     <output class="form-control"></output>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>input[type="range"] with output</h4>
@@ -120,7 +126,7 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>data-step-increment="5"</h4>
@@ -134,9 +140,9 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                     <button class="btn btn-outline-primary" data-step-increment="5" data-action="up">+5 stepIncrement</button>
-                    <button class="btn btn-outline-primary" onclick="this.closest('ui-input-stepper-element').value = 0;">0</button>
+                    <button class="btn btn-outline-primary" onclick="this.closest('ui-input-stepper').value = 0;">0</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>first-delay="1" 최고속 이동</h4>
@@ -152,7 +158,7 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>delay-multiplier=1 등속 이동</h4>
@@ -167,7 +173,7 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>delay-multiplier="1.1" max-delay="3000" 점점 느려지는 이동</h4>
@@ -183,11 +189,11 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>formattedOutput 재정의</h4>
-            <ui-input-stepper id="ui-input-stepper-element-formatedOuput" >
+            <ui-input-stepper id="ui-input-stepper-formatedOuput" >
                 <div class="input-group">
                     <button class="btn btn-outline-primary" data-action="down">-</button>
                     <div class="form-control position-relative">
@@ -196,10 +202,10 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
             <script>
                 window.addEventListener('load',(event)=>{
-                    const t = document.querySelector('#ui-input-stepper-element-formatedOuput');
+                    const t = document.querySelector('#ui-input-stepper-formatedOuput');
                     t.formattedOutput = function(v){
                         return parseFloat(v).toLocaleString()
                     }
@@ -218,7 +224,7 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
         <div class="my-3">
             <h4>애트리뷰트 formatted-output</h4>
@@ -231,7 +237,7 @@
                     </div>
                     <button class="btn btn-outline-primary" data-action="up">+</button>
                 </div>
-            </ui-input-stepper-element>
+            </ui-input-stepper>
         </div>
     </div>
 </body>
