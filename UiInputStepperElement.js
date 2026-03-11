@@ -66,7 +66,7 @@ class UiInputStepperElement extends HTMLElement  {
     const target = event.target.closest('[data-action]');
     if(!target) return;
     if(target.hasPointerCapture(event.pointerId)) { 
-      this.releasePointerCapture(event.pointerId); 
+      target.releasePointerCapture(event.pointerId); 
       this.stopRepeat()
       this.clearValueElements();
       if(this.valueAtDown !== this.value){ this.valueInput.dispatchEvent(new Event('change',{bubbles:true,cancelable:false})); }
