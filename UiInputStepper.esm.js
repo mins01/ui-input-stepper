@@ -1,0 +1,282 @@
+export default 
+class UiInputStepper{
+  /**
+   * setTimeout delay at first
+   *
+   * @static
+   * @type {number}
+   */
+  static firstDelay = 200 // ms
+
+  /**
+   * delay multiplier
+   * 1 does not change the delay time.
+   *
+   * @static
+   * @type {number}
+   */
+  static delayMultiplier = 0.96
+
+  /**
+   * setTimeout min delay
+   *
+   * @static
+   * @type {number}
+   */
+  static minDelay = 5; // ms
+
+  /**
+   * 이벤트 등록
+   *
+   * @static
+   * @param {?HTMLElement} [target=window]
+   */
+  static addEventListener(target=window){
+    target.addEventListener('pointerdown',this.onpointerdown)
+    target.addEventListener('input',this.oninput)
+    target.addEventListener('change',this.onchange)
+  }
+
+  /**
+   * 이벤트 제거
+   *
+   * @static
+   * @param {?HTMLElement} [target=window]
+   */
+  static removeEventListener(target=window){
+    target.removeEventListener('pointerdown',this.onpointerdown)
+    target.removeEventListener('input',this.oninput)
+    target.removeEventListener('change',this.onchange)
+  }
+
+  /**
+   * step up/down
+   *
+   * @static
+   * @param {HTMLInputElement} input
+   * @param {string} stepper step type up/down/none
+   */
+  static step(input,stepper){
+    const brefore = input.value;
+    switch(stepper){
+      case 'up':input.stepUp();break;
+      case 'down':input.stepDown();break;
+      case 'none':break;
+      default: throw new Error(`Unsupported stepper. (${stepper})`);
+    }
+    if(input.value!==brefore){
+      this.dispatchInput(input);
+    }
+  }
+
+  /**
+   * sync data-value attrubite
+   *
+   * @static
+   * @param {HTMLInputElement} input
+   * @param {?HTMLElement} [wrap=null] 없으면 가까운 것을 찾아 사용함
+   */
+  static syncDataValue(input,wrap=null){
+    if(wrap===null){
+      wrap = input.closest('.ui-input-stepper');
+    }
+    if(wrap){
+      if (wrap.matches('.ui-input-stepper-data-value')) {
+        this.formatValue(input, wrap);
+      }
+      wrap.querySelectorAll('.ui-input-stepper-data-value').forEach(el=>{
+        this.formatValue(input, el)
+      })
+    }
+  }
+  static formatValue(input, el){
+    const valueMultiplier = el.dataset.valueMultiplier??'1';
+    const valueToFixed = el.dataset.valueToFixed;
+    let value = input.valueAsNumber;
+    if(valueMultiplier!=='1'){ value *=parseFloat(valueMultiplier); }
+    if(valueToFixed!==undefined){ value = value.toFixed(parseInt(valueToFixed)) }
+    else{value = String(value);}
+
+    el.dataset.value = value;
+  }
+
+  /**
+   * current delay time. (ms)
+   *
+   * @static
+   * @type {number}
+   */
+  // static currentDelay = 200;
+
+  
+  static currentDelayMap = new WeakMap();
+  static timerMap = new WeakMap();
+  static valueAtDownMap = new WeakMap();
+  
+  /**
+   * Repeated Call
+   *
+   * @static
+   * @param {HTMLElement} wrap
+   * @param {HTMLInputElement} input
+   * @param {string} stepper step type up/down/none
+   * @param {Event} [event=null] relative event
+   */
+  static startStepLoop(input,stepper,wrap=null){
+    if(this.timerMap.has(input)){ 
+      clearTimeout(this.timerMap.get(input)); 
+      this.timerMap.delete(input); 
+    }
+    let currentDelay = this.currentDelayMap.get(input)??this.firstDelay;
+    let timer = setTimeout(() => {
+      this.step(input,stepper);
+      this.startStepLoop(input,stepper,wrap);
+    }, currentDelay);
+
+    // const wrap = input.closest('.ui-input-stepper');
+    const v = parseFloat(wrap?.dataset?.minDelay);
+    const minDelay = Number.isFinite(v) ? v : this.minDelay;
+    if(currentDelay > minDelay){
+      const mult = Number(wrap?.dataset?.delayMultiplier);
+      const multiplier = Number.isFinite(mult) ? mult : this.delayMultiplier;
+      currentDelay = Math.max(minDelay,currentDelay * multiplier);
+    }
+    this.currentDelayMap.set(input,currentDelay);
+    this.timerMap.set(input,timer);
+  }
+  static stopStepLoop(input){
+    if(this.timerMap.has(input)){ 
+      clearTimeout(this.timerMap.get(input)); 
+      this.timerMap.delete(input); 
+    }
+    this.currentDelayMap.delete(input);
+    this.valueAtDownMap.delete(input)
+  }
+
+
+
+    /**
+   * onpointerdown process method
+   *
+   * @param {Event} event
+   */
+  static onpointerdown = (event)=>{
+    const btn = event.target.closest('.btn-stepper');
+    if(!btn){ return; }
+    const wrap = btn.closest('.ui-input-stepper')
+    if(!wrap){ return;}
+    const input = wrap.querySelector('input:where([type="number"],[type="range"])')
+    if(!input){ return; }
+    if(!btn.dataset.stepper){ return; }
+    this.valueAtDownMap.set(input,input.valueAsNumber);
+    const stepper = btn.dataset.stepper
+    this.step(input,stepper)
+    this.currentDelayMap.set(input,parseFloat(wrap?.dataset?.firstDelay??this.firstDelay));
+
+    this.startStepLoop(input,stepper,wrap)
+
+    btn.setPointerCapture(event.pointerId);
+
+    if (!btn._uiInputStepperBound) {
+      btn._uiInputStepperBound = true;
+      btn.addEventListener('pointerup',this.onpointerup);
+      btn.addEventListener('pointercancel',this.onpointerup);
+      // btn.addEventListener('pointerleave',this.onpointerup); //이 이벤트는 발생 안함.
+    }
+  }
+
+  /**
+   * onpointerup process method
+   *
+   * @param {Event} event
+   */
+  static onpointerup = (event)=>{
+    const btn = event.target.closest('.btn-stepper');
+    if(!btn){ return; }
+    if(btn.hasPointerCapture(event.pointerId)){
+      btn.releasePointerCapture(event.pointerId);
+    }
+    if(!btn.classList.contains('btn-stepper')){ return; }
+    const wrap = btn.closest('.ui-input-stepper')
+    if(!wrap){ return;}
+    const input = wrap.querySelector('input:where([type="number"],[type="range"])')
+    if(!input){ return; }
+    
+    if(this.valueAtDownMap.get(input) !== input.valueAsNumber){
+      this.dispatchChange(input);
+    }
+    this.stopStepLoop(input);
+  }
+
+  /**
+   * oninput process method
+   *
+   * @param {Event} event
+   */
+  static oninput = (event)=>{
+    const input = event.target;
+    if(!input?.stepUp){return;} //숫자관련 input인가?
+    const wrap = input.closest('.ui-input-stepper')
+    if(!wrap){ return;}
+    this.syncDataValue(input,wrap)
+  }
+
+  /**
+   * Description placeholder
+   *
+   * @alias oninput
+   * @param {Event} event
+   */
+  static onchange = (event)=>{
+    this.oninput(event);
+  }
+
+  /**
+   * trigger input event
+   *
+   * @static
+   * @param {HTMLInputElement} input
+   */
+  static dispatchInput(input){
+    input.dispatchEvent((new Event('input',{bubbles:true,cancelable:false})));
+  }
+  static dispatchChange(input){
+    input.dispatchEvent((new Event('change',{bubbles:true,cancelable:false})));
+  }
+
+
+
+  /**
+   * initialize data-value attribute
+   *
+   * @static
+   */
+  static initDataValue(target=null){
+    if(target===null){ target = window.document }
+    target.querySelectorAll('.ui-input-stepper').forEach((wrap)=>{
+      const input = wrap.querySelector('input:where([type="number"],[type="range"])')
+      if(!input){ return; }
+      this.syncDataValue(input,wrap)
+    })
+  }
+
+
+
+
+
+
+
+  /**
+   * Fill data-value from inputElement
+   *
+   * @deprecated
+   * @alias syncDataValue
+   * @static
+   * @param {HTMLInputElement} input
+   */
+  static dataValueFromInput(input){
+    return this.syncDataValue(input);
+  }
+
+
+}

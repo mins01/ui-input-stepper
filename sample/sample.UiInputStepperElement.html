@@ -42,8 +42,11 @@
             user-select: none;
             touch-action: none;
         }
+        ui-input-stepper output{
+           text-shadow: -1px -1px 0 var(--bs-border-color,#666), 1px -1px 0 var(--bs-border-color,#666), -1px 1px 0 var(--bs-border-color,#666), 1px 1px 0 var(--bs-border-color,#666);
+        }
     </style>   
-    <script src="UiInputStepperElement.js"></script>
+    <script src="../UiInputStepperElement.js"></script>
     <script>
         window.addEventListener('load',(event)=>{
             UiInputStepperElement.defineCustomElement();
